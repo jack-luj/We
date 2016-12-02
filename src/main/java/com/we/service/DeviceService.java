@@ -1,6 +1,7 @@
 package com.we.service;
 
 import com.we.entity.Device;
+import com.we.mapper.DeviceMapper;
 import com.we.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,8 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeviceService {
 
+   // @Autowired
+    //DeviceRepository deviceRepository;
+
     @Autowired
-    DeviceRepository deviceRepository;
+    DeviceMapper deviceRepository;
 
     public Device findByImei(String imei) {
         return deviceRepository.findByImei(imei);
