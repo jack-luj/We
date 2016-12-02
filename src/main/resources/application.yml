@@ -5,7 +5,8 @@ logging:
     level:
         org.hibernate: WARN
         org.springframework: WARN
-
+#是否打印http请求日志
+logFilter.disabled: false
 # Spring settings
 spring:
     profiles.active: dev
@@ -23,6 +24,12 @@ spring:
         validationQuery: SELECT 'x'
         testWhileIdle: true
         testOnBorrow: true
+        testOnReturn: false
+        #配置监控统计拦截的filters
+        filters: stat
+        #打开PSCache，并且指定每个连接上PSCache的大小
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
     jpa:
         show-sql: true
         hibernate:

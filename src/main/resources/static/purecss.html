@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A layout example with a side menu that hides on mobile, just like the Pure website.">
+    <title>Pure CSS</title>
+    
+    <link rel="stylesheet" href="css/pure-min.css">
+    
+    
+    
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="css/layouts/side-menu-old-ie.css">
+        <![endif]-->
+        <!--[if gt IE 8]><!-->
+            <link rel="stylesheet" href="css/layouts/side-menu.css">
+        <!--<![endif]-->
+</head>
+<body>
+
+
+
+
+
+
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="#">Company</a>
+
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">设备管理</a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">用户管理</a></li>
+
+                <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
+                    <a href="#" class="pure-menu-link">Services</a>
+                </li>
+
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+        <div class="header">
+            <h2>A subtitle for your page goes here</h2>
+        </div>
+
+        <div class="content">
+            <h2 class="content-subhead">How to use this layout</h2>
+            <form class="pure-form">
+                <fieldset>
+
+                    <input type="text" placeholder="imei" id="imei" size="30">
+                    <button type="button" class="pure-button pure-button-primary" id="searchBtn">搜索</button>
+                </fieldset>
+            </form>
+            <table class="pure-table">
+
+                <tbody>
+
+                <tr class="pure-table-odd">
+                    <td>imei</td>
+                    <td><label id="imeiLbl"></label></td>
+
+                </tr>
+                <tr>
+                    <td>品牌</td>
+                    <td><label id="brandNameLbl"></label></td>
+
+                </tr>
+                <tr class="pure-table-odd">
+                    <td>型号</td>
+                    <td><label id="modelLbl"></label></td>
+
+                </tr>
+                <tr>
+                    <td>imsi</td>
+                    <td><label id="imsiLbl"></label></td>
+
+                </tr>
+                <tr class="pure-table-odd">
+                    <td>wifi MAC</td>
+                    <td><label id="wifiMacLbl"></label></td>
+
+                </tr>
+
+
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script src="js/ui.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript">
+    function loadData(imei){
+        $.get("/api/device/"+imei,function(data,status){
+            if(status=='success'){
+                console.log("resp:"+JSON.stringify(data));
+                if(data.status=='true'){
+                    var msg=data.message;
+                    $("#imeiLbl").html(msg.imei);
+                    $("#brandNameLbl").html(msg.brandName);
+                    $("#modelLbl").html(msg.model);
+                    $("#imsiLbl").html(msg.imsi);
+                    $("#wifiMacLbl").html(msg.wifiMac);
+                }
+            }
+
+        });
+    }
+
+    $(document).ready(function(){
+      $("#searchBtn").click(function(){
+          var _imei=$("#imei").val();
+          if(_imei==''){
+              _imei='862136020035370';
+          }
+          loadData(_imei);
+      });
+
+    });
+
+
+
+</script>
+</body>
+</html>
