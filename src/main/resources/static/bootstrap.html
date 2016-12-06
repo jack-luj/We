@@ -10,12 +10,8 @@
     <script src="./js/bootstrap-table-locale-all.min.js"></script>
 </head>
 <body>
-<table id="table">
-
+<table id="table" data-striped="true">
 </table>
-<div class="paging-toolbar">
-    <ul id='grid_paging'></ul>
-</div>
 
 <script>
     var $table = $('#table');
@@ -25,9 +21,14 @@
         pagination: true, //分页
         singleSelect: false,
         locale:"zh-CN" , //表格汉化
-            search: true, //显示搜索框
-            sidePagination: "server", //服务端处理分页
-            columns: [
+        search: true, //显示搜索框
+        showToggle: true,
+        clickToSelect: true,
+        queryParamsType: "",
+        sortName: "id",
+        pageList: [5,10,20],
+        sidePagination: "server", //服务端处理分页
+        columns: [
         {
             title: 'imei',
             field: 'imei',

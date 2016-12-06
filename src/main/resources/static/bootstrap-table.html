@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A layout example with a side menu that hides on mobile, just like the Pure website.">
+    <title>Responsive Side Menu &ndash; Layout Examples &ndash; Pure</title>
+
+    <link rel="stylesheet" href="css/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="css/layouts/side-menu-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="css/layouts/side-menu.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <link href="./css/bootstrap-table.min.css" rel="stylesheet"/>
+    <script src="./js/bootstrap-table.min.js"></script>
+    <script src="./js/bootstrap-table-locale-all.min.js"></script>
+
+</head>
+<body>
+
+
+
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="#">Company</a>
+
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="/" class="pure-menu-link">首页</a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">设备管理</a></li>
+
+                <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
+                    <a href="#" class="pure-menu-link">Services</a>
+                </li>
+
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+        <table id="table" data-striped="true">
+        </table>
+
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="delModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除设备</h4>
+            </div>
+            <div class="modal-body">
+                <p>确定删除设备XXXXX吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<script src="js/ui.js"></script>
+<script src="js/tools.js"></script>
+</body>
+<script>
+    var $table = $('#table');
+    $table.bootstrapTable({
+        url: "api/device",
+        dataType: "json",
+        pagination: true, //分页
+        singleSelect: false,
+        locale:"zh-CN" , //表格汉化
+        search: true, //显示搜索框
+        showToggle: false,//是否显示 切换试图（table/card）按钮
+        showRefresh: true,//是否显示 刷新按钮
+        searchOnEnterKey: true,//回车触发搜索方法
+        clickToSelect: true,
+        showColumns: false,
+        showPaginationSwitch: false,//是否显示 数据条数选择框
+        onlyInfoPagination:false,//设置为 true 只显示总数据数，而不显示分页按钮。需要 pagination='True'
+        queryParamsType: "",
+        sortName: "id",
+        pageSize: 5,
+        responseHandler:responseHandler,
+        pageList: [],
+        sidePagination: "server", //服务端处理分页
+        columns: [
+            {
+                title: 'imei',
+                field: 'imei',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                title: '型号',
+                field: 'model',
+                align: 'center',
+                valign: 'middle',
+            },
+            {
+                title: 'imsi',
+                field: 'imsi',
+                align: 'center',
+                valign: 'middle',
+            },
+            {
+                title: '品牌',
+                field: 'brandName',
+                align: 'center'
+            },
+            {
+                title: 'wifi mac',
+                field: 'wifiMac',
+                align: 'center',
+            },
+            {
+                title: '接收时间',
+                field: 'receiveTime',
+                align: 'center'
+            },
+
+            {
+                title: '操作',
+                field: 'id',
+                align: 'center',
+                formatter:function(value,row,index){
+                    var e = '<a href="#" mce_href="#" onclick="edit(\''+ row.id + '\')">编辑</a> ';
+                    var d = '<a href="#" mce_href="#" data-toggle="modal" data-target="#delModal" onclick="del(\''+ row.id +'\')">删除</a> ';
+                    return e+d;
+                }
+            }
+        ]
+    });
+
+    function edit(id){
+        console.log("编辑id:"+id);
+    }
+    function del(id){
+        console.log("删除id:"+id);
+    }
+    function responseHandler(res) {
+        var rows=res.rows;
+        for(var index in rows){
+            rows[index].receiveTime=formatDate(new Date(rows[index].receiveTime),"yyyy-MM-dd HH:mm:ss");
+        }
+        return res;
+    }
+</script>
+</html>

@@ -34,24 +34,26 @@ public class DeviceController {
 
 
     @RequestMapping(value = "/device", method = RequestMethod.GET)
-    public PageResult findDevice(@RequestParam(value = "currentPage",required = false) Integer currentPage,
+    public PageResult findDevice(@RequestParam(value = "pageNumber",required = false) Integer pageNumber,
                              @RequestParam(value = "pageSize",required = false) Integer pageSize,
                              @RequestParam(value = "id",required = false) Integer id,
                              @RequestParam(value = "model",required = false) String model,
                              @RequestParam(value = "imei",required = false) String imei,
                              @RequestParam(value = "brandName",required = false) String brandName,
-                             @RequestParam(value = "orderByProperty",required = false) String orderByProperty,
-                             @RequestParam(value = "ascOrDesc",required = false) String ascOrDesc,
+                             @RequestParam(value = "searchText",required = false) String searchText,
+                             @RequestParam(value = "sortName",required = false) String orderByProperty,
+                             @RequestParam(value = "sortOrder",required = false) String ascOrDesc,
                              @RequestParam(value = "fuzzy",required = false) Integer fuzzy,
                              HttpServletResponse response){
 
-        currentPage = currentPage==null?1:currentPage; //页号
+        pageNumber = pageNumber==null?1:pageNumber; //页号
         pageSize = pageSize==null?5:pageSize; //每页数据条数
         orderByProperty= orderByProperty==null?"id":orderByProperty;
         ascOrDesc= ascOrDesc==null?"asc":ascOrDesc;
 
         String sortString = orderByProperty+"."+ascOrDesc;//如果你想排序的话逗号分隔可以排序多列
-        PageBounds pageBounds = new PageBounds(currentPage, pageSize , Order.formString(sortString));
+        PageBounds pageBounds = new PageBounds(pageNumber, pageSize , Order.formString(sortString));
+        imei=searchText;
         List devices =deviceService.findByKeys(model, imei, brandName, pageBounds);
         PageList pageList = (PageList)devices;
         PageResult pageResult=new PageResult(pageList.getPaginator().getTotalCount(),devices,pageList.getPaginator().getPage());
