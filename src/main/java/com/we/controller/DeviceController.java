@@ -34,7 +34,7 @@ public class DeviceController {
 
 
     @RequestMapping(value = "/device", method = RequestMethod.GET)
-    public List findDevice(@RequestParam(value = "currentPage",required = false) Integer currentPage,
+    public PageResult findDevice(@RequestParam(value = "currentPage",required = false) Integer currentPage,
                              @RequestParam(value = "pageSize",required = false) Integer pageSize,
                              @RequestParam(value = "id",required = false) Integer id,
                              @RequestParam(value = "model",required = false) String model,
@@ -47,16 +47,15 @@ public class DeviceController {
 
         currentPage = currentPage==null?1:currentPage; //页号
         pageSize = pageSize==null?5:pageSize; //每页数据条数
-        String sortString = "id.asc";//如果你想排序的话逗号分隔可以排序多列
-        PageBounds pageBounds = new PageBounds(currentPage, pageSize , Order.formString(sortString));
-        List devices =deviceService.findByKeys(model,imei,brandName, pageBounds);
+        orderByProperty= orderByProperty==null?"id":orderByProperty;
+        ascOrDesc= ascOrDesc==null?"asc":ascOrDesc;
 
+        String sortString = orderByProperty+"."+ascOrDesc;//如果你想排序的话逗号分隔可以排序多列
+        PageBounds pageBounds = new PageBounds(currentPage, pageSize , Order.formString(sortString));
+        List devices =deviceService.findByKeys(model, imei, brandName, pageBounds);
         PageList pageList = (PageList)devices;
-        if(devices.size() > 0){
-            response.addHeader("Page",String.valueOf(pageList.getPaginator().getPage()));
-            response.addHeader("Page-Count", String.valueOf(pageList.getPaginator().getTotalPages()));
-        }
-        return devices;
+        PageResult pageResult=new PageResult(pageList.getPaginator().getTotalCount(),devices,pageList.getPaginator().getPage());
+        return pageResult;
     }
 
 
