@@ -5,8 +5,11 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.we.entity.Device;
 import com.we.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.RequestContext;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,9 +29,9 @@ public class DeviceController {
     public JsonResult query(@PathVariable("imei") String imei){
         Device device= deviceService.findByImei(imei);
         if(device==null){
-            return new JsonResult("false","设备不存在");
+            return new JsonResult("failed","设备不存在");
         }else{
-            return new JsonResult("true",device);
+            return new JsonResult("success",device);
         }
     }
 
@@ -61,7 +64,50 @@ public class DeviceController {
     }
 
 
+    @RequestMapping(value="/device",method = RequestMethod.POST)
+    @Transactional
+    public JsonResult createDevice(@RequestBody Device device,
+                                  @CookieValue(value="token",required = false) String token,
+                                  HttpServletRequest request){
 
+        RequestContext requestContext = new RequestContext(request);
+        try {
+            deviceService.addDevice(device);
+            return new JsonResult("success", "添加成功");
+        }catch (Exception e){
+            return new JsonResult("failed", "添加失败");
+        }
+
+
+    }
+
+    @RequestMapping(value="/device",method = RequestMethod.PUT)
+    @Transactional
+    public JsonResult updateDevice(@RequestBody Device device,
+                                   @CookieValue(value="token",required = false) String token,
+                                   HttpServletRequest request){
+        RequestContext requestContext = new RequestContext(request);
+        try {
+            deviceService.updateDevice(device);
+            return new JsonResult("success", "更新成功");
+        }catch(Exception e){e.printStackTrace();
+            return new JsonResult("failed", "更新失败");
+        }
+
+    }
+
+    @RequestMapping(value="/device/{imei}",method = RequestMethod.DELETE)
+    @Transactional
+    public JsonResult deleteDevice(@PathVariable("imei") String imei, HttpServletRequest request){
+        RequestContext requestContext = new RequestContext(request);
+        try {
+           //deviceService.deleteDevice(imei);
+            return new JsonResult("success", "删除成功");
+        }catch(Exception e){e.printStackTrace();
+            return new JsonResult("failed", "删除失败");
+        }
+
+    }
 
 
 }

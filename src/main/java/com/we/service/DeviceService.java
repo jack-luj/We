@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,14 +32,11 @@ public class DeviceService {
         return deviceRepository.findByImei(imei);
     }
 
-
-
     public SqlSession getSqlSession(){
         return sqlSessionFactory.openSession();
     }
 
     public List findByKeys(String model,String imei,String brandName, PageBounds pageBounds){
-
         SqlSession session = null;
         try{
             session = getSqlSession();
@@ -55,5 +53,19 @@ public class DeviceService {
             session.close();
         }
 
+    }
+
+    public void addDevice(Device device){
+        device.setId(0l);
+        device.setReceiveTime(new Date());
+       deviceRepository.save(device);
+    }
+    public void updateDevice(Device device){
+        device.setReceiveTime(new Date());
+        deviceRepository.update(device);
+    }
+
+    public void deleteDevice(String imei){
+        deviceRepository.delete(imei);
     }
 }

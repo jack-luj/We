@@ -66,11 +66,11 @@
                 <h4 class="modal-title">删除设备</h4>
             </div>
             <div class="modal-body">
-                <p>确定删除设备XXXXX吗？</p>
+                <p id="currentDeviceImei"></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-primary" onclick="doDel()">确定</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -83,6 +83,7 @@
 </body>
 <script>
     var $table = $('#table');
+    var currentDevice;
     $table.bootstrapTable({
         url: "api/device",
         dataType: "json",
@@ -144,18 +145,53 @@
                 align: 'center',
                 formatter:function(value,row,index){
                     var e = '<a href="#" mce_href="#" onclick="edit(\''+ row.id + '\')">编辑</a> ';
-                    var d = '<a href="#" mce_href="#" data-toggle="modal" data-target="#delModal" onclick="del(\''+ row.id +'\')">删除</a> ';
+                    var d = '<a href="#" mce_href="#" data-toggle="modal" data-target="#delModal" onclick="del(\''+ row.imei +'\')">删除</a> ';
                     return e+d;
                 }
             }
         ]
     });
 
-    function edit(id){
-        console.log("编辑id:"+id);
+    function edit(imei){
+        console.log("编辑imei:"+imei);
+        loadData(imei,'edit');
     }
-    function del(id){
-        console.log("删除id:"+id);
+    function doDel(imei){
+        console.log("执行删除imei:"+currentDevice.imei);
+        $.ajax({
+            url: '/api/device/'+currentDevice.imei,
+            type: 'DELETE',
+            success: function(data) {
+                // Do something with the result
+                if(data.status=='success'){
+                    //删除成功
+                    $("#delModal").modal('hide');
+                    $table.bootstrapTable('refresh');
+                }
+            }
+        });
+
+
+    }
+    function del(imei){
+        console.log("删除imei:"+imei);
+        loadData(imei,'del');
+    }
+    function loadData(imei,method){
+        $.get("/api/device/"+imei,function(data,status){
+            if(status=='success'){
+                console.log("resp:"+JSON.stringify(data));
+                if(data.status=='success'){
+                    currentDevice=data.message;
+                    console.log(currentDevice);
+                    if(method=='del'){
+                        $("#currentDeviceImei").html("确定删除设备"+ currentDevice.imei +"吗？");
+                    }else if(method='edit'){
+
+                    }
+                }
+            }
+        });
     }
     function responseHandler(res) {
         var rows=res.rows;
