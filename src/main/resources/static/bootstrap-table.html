@@ -15,9 +15,9 @@
     <!--<![endif]-->
 
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link href="./css/bootstrap-table.min.css" rel="stylesheet"/>
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
-    <link href="./css/bootstrap-table.min.css" rel="stylesheet"/>
     <script src="./js/bootstrap-table.min.js"></script>
     <script src="./js/bootstrap-table-locale-all.min.js"></script>
 
@@ -245,7 +245,6 @@
             }
         });
 
-
     }
     function del(imei){
         console.log("删除imei:"+imei);
@@ -339,8 +338,6 @@
         });
     });
     function queryParams(params) {
-        console.log('params'+JSON.stringify(params))
-        // var params = {};
         $('#toolbar').find('input[name]').each(function () {
             params[$(this).attr('name')] = $(this).val();
         });
