@@ -61,8 +61,14 @@ public class DeviceService {
        deviceRepository.save(device);
     }
     public void updateDevice(Device device){
-        device.setReceiveTime(new Date());
-        deviceRepository.update(device);
+        Device old=deviceRepository.findByImei(device.getImei());
+        if(old!=null){
+            old.setReceiveTime(new Date());
+            old.setModel(device.getModel());
+            old.setBrandName(device.getBrandName());
+            deviceRepository.update(old);
+        }
+
     }
 
     public void deleteDevice(String imei){

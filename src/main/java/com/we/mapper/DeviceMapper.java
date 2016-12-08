@@ -24,7 +24,7 @@ public interface DeviceMapper {
     void save(@Param("device")Device device);
 
     @Insert("update t_device set model=#{device.model}, odm_model=#{device.odmModel},imei=#{device.imei},imsi=#{device.imsi},hw_ver=#{device.hwVer}," +
-            "sw_ver=#{device.swVer},odm_sw_ver=#{device.odmSwVer},wifi_mac=#{device.wifiMac},bt_mac=#{device.btMac},vendor=#{device.vendor},brand_name=#{device.brandName},receive_time=#{device.receiveTime} where id=#{device.id}")
+            "sw_ver=#{device.swVer},odm_sw_ver=#{device.odmSwVer},wifi_mac=#{device.wifiMac},bt_mac=#{device.btMac},vendor=#{device.vendor},brand_name=#{device.brandName},receive_time=#{device.receiveTime} where imei=#{device.imei}")
     void update(@Param("device")Device device);
 
     @Delete("delete from t_device where imei=#{imei}")

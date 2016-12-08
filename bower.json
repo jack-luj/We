@@ -3,8 +3,9 @@
   "private": true,
   "dependencies": {
     "charisma-master": "bf07c0ee89",
-    "bootstrap_table": "1.11.0",
+    "bootstrap-table": "^1.11.0",
     "jquery": "^3.1.1",
-    "bootstrap": "^3.3.7 "
+    "bootstrap": "^3.3.7",
+    "bootstrapValidator": "0.5.3"
   }
 }

@@ -66,7 +66,7 @@
                     <span>结束时间: </span>
                     <input id="endDate" name="endDate" class="form-control w70" type="datetime" >
                 </div>
-                <button id="searchBtn"  class="btn btn-default">查询</button>
+                 <button id="searchBtn"  class="btn btn-default">查询</button>
             </div>
         </div>
         <table id="table" data-striped="true">
@@ -164,10 +164,20 @@
         url: "api/device",
         dataType: "json",
         pagination: true, //分页
+        singleSelect: false,
         locale:"zh-CN" , //表格汉化
         search: false, //显示搜索框
+        showToggle: false,//是否显示 切换试图（table/card）按钮
+        showRefresh: false,//是否显示 刷新按钮
+        searchOnEnterKey: false,//回车触发搜索方法
+        clickToSelect: false,
+        showColumns: false,
+        searchAlign: "left",//查询框对齐方式
+        buttonsAlign: "left",//按钮对齐方式
+     //   paginationVAlign: "both",
         toolbar: "#toolbar",//指定工具栏
         toolbarAlign: "right",//工具栏对齐方式
+        showPaginationSwitch: false,//是否显示 数据条数选择框
         onlyInfoPagination:false,//设置为 true 只显示总数据数，而不显示分页按钮。需要 pagination='True'
         queryParamsType: "",
         sortName: "id",
@@ -301,7 +311,7 @@
                 }
             },
             error: function(){
-                console.log("Device add  failed");
+              console.log("Device add  failed");
             }
         });
 
@@ -340,7 +350,7 @@
     });
     function queryParams(params) {
         console.log('params'+JSON.stringify(params))
-        // var params = {};
+       // var params = {};
         $('#toolbar').find('input[name]').each(function () {
             params[$(this).attr('name')] = $(this).val();
         });

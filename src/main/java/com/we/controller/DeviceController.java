@@ -101,7 +101,7 @@ public class DeviceController {
     public JsonResult deleteDevice(@PathVariable("imei") String imei, HttpServletRequest request){
         RequestContext requestContext = new RequestContext(request);
         try {
-           //deviceService.deleteDevice(imei);
+           deviceService.deleteDevice(imei);
             return new JsonResult("success", "删除成功");
         }catch(Exception e){e.printStackTrace();
             return new JsonResult("failed", "删除失败");
